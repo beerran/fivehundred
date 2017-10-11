@@ -1,0 +1,7 @@
+<div class="playingCards faceImages" id="cards" *ngIf="cards && cards.length > 0">
+    <ul class="deck">
+        <li *ngFor="let card of (cards ? cards.slice(0, 10).reverse() : [])">
+            <playing-card [card]="card" (onCardClick)="cardClicked($event)" [back]="true"></playing-card>
+        </li>
+    </ul>
+</div>

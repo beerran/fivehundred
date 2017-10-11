@@ -1,0 +1,7 @@
+<a class="card" (click)="cardClicked(card, $event)" [ngClass]="getClasses()" href="#">
+    <div *ngIf="back; else showValues">*</div>
+    <ng-template #showValues>
+        <span class="rank">{{card.value}}</span>
+        <span class="suit">{{suitIcon}}</span>
+    </ng-template>
+</a>

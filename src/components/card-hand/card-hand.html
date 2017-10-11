@@ -1,0 +1,7 @@
+<div class="playingCards faceImages" [class.rotateHand]="fan" id="cards" *ngIf="cards && cards.length > 0">
+    <ul class="hand">
+      <li *ngFor="let card of cards">
+        <playing-card [card]="card" (onCardClick)="cardClicked($event)" [back]="back"></playing-card>
+      </li>
+    </ul>
+</div>
