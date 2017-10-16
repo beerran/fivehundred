@@ -13,6 +13,6 @@ export class CardHandComponent {
   constructor() { }
 
   cardClicked(card: Card) {
-    window.alert('you chose the ' + Card.GetValue(card.value) + ' of ' + Card.GetSuit(card.suit))
+    window.alert('you chose the ' + Card.GetValue(card.value) + ' of ' + card.suit)
   }
 }

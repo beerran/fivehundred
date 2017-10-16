@@ -19,7 +19,7 @@ export class PlayingCardComponent implements OnInit {
 
   ngOnInit() {
     switch(this.card.suit) {
-      case 'diams':        
+      case 'diamonds':        
         this.suitIcon = '♦';
         break;
       case 'hearts':

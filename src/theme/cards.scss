@@ -85,15 +85,15 @@ $playingCards-hand-bottom-margin: 3.5em !default;
 /* suit colours
  ********************************************************************/
 
-.playingCards .card.diams {
+.playingCards .card.diamonds {
     color: #f00 !important;
 }
 
-.playingCards.fourColours .card.diams {
+.playingCards.fourColours .card.diamonds {
     color: #00f !important;
 }
 
-[lang=de] .playingCards.fourColours .card.diams {
+[lang=de] .playingCards.fourColours .card.diamonds {
     color: #f60 !important;
 }
 
@@ -278,7 +278,7 @@ only screen and (-device-pixel-ratio: 1) {
     .playingCards .card.clubs.rank-10 .suit:after,
     .playingCards .card.hearts.rank-10 .suit:after,
     .playingCards .card.spades.rank-10 .suit:after,
-    .playingCards .card.diams.rank-10 .suit:after {
+    .playingCards .card.diamonds.rank-10 .suit:after {
         letter-spacing: -.30em;
         word-spacing: -.1em;
     }
@@ -290,39 +290,39 @@ only screen and (-device-pixel-ratio: 1) {
 
 /* diamonds */
 
-.playingCards .card.rank-2.diams .suit:after {
+.playingCards .card.rank-2.diamonds .suit:after {
     content: "\2666 \A\A\2666";
 }
 
-.playingCards .card.rank-3.diams .suit:after {
+.playingCards .card.rank-3.diamonds .suit:after {
     content: "\2666 \A\2666 \A\2666";
 }
 
-.playingCards .card.rank-4.diams .suit:after {
+.playingCards .card.rank-4.diamonds .suit:after {
     content: "\2666\00A0\00A0\00A0\2666 \A\A\2666\00A0\00A0\00A0\2666";
 }
 
-.playingCards .card.rank-5.diams .suit:after {
+.playingCards .card.rank-5.diamonds .suit:after {
     content: "\2666\00A0\00A0\00A0\2666 \A\2666 \A\2666\00A0\00A0\00A0\2666";
 }
 
-.playingCards .card.rank-6.diams .suit:after {
+.playingCards .card.rank-6.diamonds .suit:after {
     content: "\2666\00A0\00A0\00A0\2666 \A\2666\00A0\00A0\00A0\2666 \A\2666\00A0\00A0\00A0\2666";
 }
 
-.playingCards .card.rank-7.diams .suit:after {
+.playingCards .card.rank-7.diamonds .suit:after {
     content: "\2666\00A0\00A0\2666 \A\2666\00A0\2666\00A0\2666 \A\2666\00A0\00A0\2666";
 }
 
-.playingCards .card.rank-8.diams .suit:after {
+.playingCards .card.rank-8.diamonds .suit:after {
     content: "\2666\00A0\2666\00A0\2666 \A\2666\00A0\00A0\2666 \A\2666\00A0\2666\00A0\2666";
 }
 
-.playingCards .card.rank-9.diams .suit:after {
+.playingCards .card.rank-9.diamonds .suit:after {
     content: "\2666\00A0\2666\00A0\2666 \A\2666\00A0\2666\00A0\2666 \A\2666\00A0\2666\00A0\2666";
 }
 
-.playingCards .card.rank-10.diams .suit:after {
+.playingCards .card.rank-10.diamonds .suit:after {
     content: "\2666\00A0\2666\00A0\2666 \A\2666\00A0\2666\00A0\2666\00A0\2666 \A\2666\00A0\2666\00A0\2666";
 }
 
@@ -470,7 +470,7 @@ only screen and (-device-pixel-ratio: 1) {
    */
 }
 
-.playingCards.faceImages .card.rank-J.diams {
+.playingCards.faceImages .card.rank-J.diamonds {
     background-image: url(/assets/faces/JD.gif);
     background-position-x: 30%;
 }
@@ -490,7 +490,7 @@ only screen and (-device-pixel-ratio: 1) {
     background-position-x: 30%;
 }
 
-.playingCards.faceImages .card.rank-Q.diams {
+.playingCards.faceImages .card.rank-Q.diamonds {
     background-image: url(/assets/faces/QD.gif);
     background-position-x: 30%;
 }
@@ -510,7 +510,7 @@ only screen and (-device-pixel-ratio: 1) {
     background-position-x: 30%;
 }
 
-.playingCards.faceImages .card.rank-K.diams {
+.playingCards.faceImages .card.rank-K.diamonds {
     background-image: url(/assets/faces/KD.gif);
     background-position-x: 30%;
 }
@@ -595,8 +595,8 @@ only screen and (-device-pixel-ratio: 1) {
     line-height: .9;
 }
 
-.playingCards.simpleCards .card.diams .suit:after,
-.playingCards .card.rank-A.diams .suit:after {
+.playingCards.simpleCards .card.diamonds .suit:after,
+.playingCards .card.rank-A.diamonds .suit:after {
     content: "\2666";
 }
 

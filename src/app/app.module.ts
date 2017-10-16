@@ -12,7 +12,20 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { ComponentsModule } from '../components/components.module';
-import { CardService } from '../services/card.service';
+import { GameService } from '../services/game.service';
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAnF1gkHwtYuXx2s7r6y-tNC_OBlPyfXoI",
+  authDomain: "fivehundred-4a7aa.firebaseapp.com",
+  databaseURL: "https://fivehundred-4a7aa.firebaseio.com",
+  projectId: "fivehundred-4a7aa",
+  storageBucket: "",
+  messagingSenderId: "591905384447"
+};
 
 @NgModule({
   declarations: [
@@ -25,7 +38,10 @@ import { CardService } from '../services/card.service';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    ComponentsModule
+    ComponentsModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireAuthModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -36,7 +52,7 @@ import { CardService } from '../services/card.service';
     TabsPage
   ],
   providers: [
-    CardService,
+    GameService,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

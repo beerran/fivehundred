@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Card } from '../../models/card.model';
-import { CardService } from '../../services/card.service';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'page-home',
@@ -14,27 +14,27 @@ export class HomePage implements OnInit {
 
   constructor(
     public navCtrl: NavController,
-    private cardService: CardService
+    private gameService: GameService
   ) {
   }
 
   ngOnInit() {
-    this.cardService.getOpponentCards().subscribe(data => {
-      this.opponentCards = data;
-    });
+    // this.cardService.getOpponentCards().subscribe(data => {
+    //   this.opponentCards = data;
+    // });
 
-    this.cardService.getMyCards().subscribe(data => {
-      this.playerCards = data;
-    });
+    // this.cardService.getMyCards().subscribe(data => {
+    //   this.playerCards = data;
+    // });
 
-    this.cardService.getDeck().subscribe(data => {
-      this.deckCards = data;
-      this.cardService.drawCards();
-    });
+    // this.cardService.getDeck().subscribe(data => {
+    //   this.deckCards = data;
+    //   this.cardService.drawCards();
+    // });
   }
 
   cardFromDeck(card: Card) {
-    alert('you chose the ' + Card.GetValue(card.value) + ' of ' + Card.GetSuit(card.suit));
+    alert('you chose the ' + Card.GetValue(card.value) + ' of ' + card.suit);
   }
 
 }

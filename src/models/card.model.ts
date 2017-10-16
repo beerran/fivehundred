@@ -18,13 +18,4 @@ export class Card {
                 return value;
         }
     }
-
-    public static GetSuit(suit: string) {
-        switch(suit) {
-            case 'diams':
-                return 'diamonds';
-            default:
-                return suit;
-        }
-    }
 }
