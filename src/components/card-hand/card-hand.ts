@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Card } from '../../models/card.model';
 
 @Component({
@@ -9,10 +9,11 @@ export class CardHandComponent {
   @Input() cards: Card[] = [];
   @Input() back = false;
   @Input() fan = false;
+  @Output() onCardClick: EventEmitter<Card> = new EventEmitter<Card>();
   
   constructor() { }
 
   cardClicked(card: Card) {
-    window.alert('you chose the ' + Card.GetValue(card.value) + ' of ' + card.suit)
+    this.onCardClick.emit(card);    
   }
 }

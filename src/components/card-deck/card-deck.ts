@@ -7,13 +7,21 @@ import { Card } from '../../models/card.model';
   templateUrl: 'card-deck.html'
 })
 export class CardDeckComponent {
-  @Input() cards: Card[] = [];
-  @Output() onCardClick: EventEmitter<Card> = new EventEmitter<Card>();
+  private amountArray = [];
+  @Input('amount')
+  set amount(input: number) {
+    for(let i = 0; i < input; i++) {
+      this.amountArray.push(i);
+    }
+  }
+  @Input() cards: Card[] = null;
+  @Output() onCardClick: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  private card = new Card('','');
 
   constructor() { }
 
-  cardClicked(card: Card) {
-    this.cards.splice(this.cards.indexOf(card), 1);
-    this.onCardClick.emit(card);
+  cardClicked() {
+    this.onCardClick.emit(true);
   }
 }

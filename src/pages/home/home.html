@@ -8,7 +8,9 @@
   <h2>Welcome to Ionic!</h2>
   <card-hand [cards]="opponentCards" [back]="true"></card-hand>
 
-  <card-deck [cards]="deckCards" (onCardClick)="cardFromDeck($event)"></card-deck>
+  <card-deck [amount]="deckRemaining" (onCardClick)="drawCard()"></card-deck>
 
-  <card-hand [cards]="playerCards"></card-hand>
+  <card-deck [cards]="trash" (onCardClick)="pickupCard()"></card-deck>
+
+  <card-hand [cards]="playerCards" (onCardClick)="throwCard($event)" ></card-hand>
 </ion-content>

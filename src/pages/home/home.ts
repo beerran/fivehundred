@@ -10,7 +10,8 @@ import { GameService } from '../../services/game.service';
 export class HomePage implements OnInit {
   playerCards: Card[] = [];
   opponentCards: Card[] = [];
-  deckCards: Card[] = [];
+  trash: Card[] = [];
+  deckRemaining: number;
 
   constructor(
     public navCtrl: NavController,
@@ -19,22 +20,26 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    // this.cardService.getOpponentCards().subscribe(data => {
-    //   this.opponentCards = data;
-    // });
-
-    // this.cardService.getMyCards().subscribe(data => {
-    //   this.playerCards = data;
-    // });
-
-    // this.cardService.getDeck().subscribe(data => {
-    //   this.deckCards = data;
-    //   this.cardService.drawCards();
-    // });
+    this.gameService.myPlayer.sub.subscribe(data => {
+      if(data) {
+        this.playerCards = data.cards;
+      }
+    });
+    this.gameService.trash.subscribe(data => this.trash = data);
+    this.gameService.deckRemaining.subscribe(data => this.deckRemaining = data);
+    this.gameService.init();
   }
 
-  cardFromDeck(card: Card) {
-    alert('you chose the ' + Card.GetValue(card.value) + ' of ' + card.suit);
+  drawCard() {
+    console.log('i wanna draw a card');
+  }
+
+  pickupCard() {
+    console.log('i wanna pick a card');
+  }
+
+  throwCard(card: Card) {
+    this.gameService.throwCard(card);
   }
 
 }
