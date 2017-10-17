@@ -62,7 +62,7 @@ export class GameService {
         } else {
             this.myPlayer.ref.doc('data').ref.get().then(data => {
                 const cards: Card[] = data.get('cards');
-                cards.splice(cards.indexOf(card, 1));
+                cards.splice(cards.findIndex(c => c.suit === card.suit && c.value === card.value), 1);
                 this.myPlayer.ref.doc('data').update({cards: cards});
                 this.currentGame.ref.get().then(data => {
                     this.addCardToTrash(card);
