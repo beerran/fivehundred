@@ -34,6 +34,35 @@ export class GameService {
         this.gamesRef = fireStore.collection('games');        
     }
 
+    init() {
+        this.startGame().then(data => {
+            this.currentGame = {
+                id: data.id,
+                ref: <firebase.firestore.DocumentReference> this.gamesRef.doc(data.id).ref,
+                observable: <Observable<Game>> this.gamesRef.doc(data.id).valueChanges()
+            };
+            this.currentGame.observable.subscribe(data => {                
+                this.deckRemaining.next(data.deck.length);
+                this.trash.next(data.trash);
+            });
+            data.sub.unsubscribe();
+            this.dealCards();
+        }).catch(error => console.log(error));
+    }
+
+    resume(id: string) {
+        this.currentGame = {
+            id: id,
+            ref: <firebase.firestore.DocumentReference> this.gamesRef.doc(id).ref,
+            observable: <Observable<Game>> this.gamesRef.doc(id).valueChanges()
+        };
+        this.currentGame.observable.subscribe(data => {
+            this.deckRemaining.next(data.deck.length);
+            this.trash.next(data.trash);
+        });
+        this.resumeCards();
+    }
+
     pickupCard() {
         this.currentGame.ref.get().then(data => {
             const trash: Card[] = data.get('trash');
@@ -64,35 +93,6 @@ export class GameService {
         });
     }
 
-    init() {
-        this.startGame().then(data => {
-            this.currentGame = {
-                id: data.id,
-                ref: <firebase.firestore.DocumentReference> this.gamesRef.doc(data.id).ref,
-                observable: <Observable<Game>> this.gamesRef.doc(data.id).valueChanges()
-            };
-            this.currentGame.observable.subscribe(data => {                
-                this.deckRemaining.next(data.deck.length);
-                this.trash.next(data.trash);
-            });
-            data.sub.unsubscribe();
-            this.dealCards();
-        }).catch(error => console.log(error));
-    }
-
-    resume(id: string) {
-        this.currentGame = {
-            id: id,
-            ref: <firebase.firestore.DocumentReference> this.gamesRef.doc(id).ref,
-            observable: <Observable<Game>> this.gamesRef.doc(id).valueChanges()
-        };
-        this.currentGame.observable.subscribe(data => {
-            this.deckRemaining.next(data.deck.length);
-            this.trash.next(data.trash);
-        });
-        this.resumeCards();
-    }
-
     makePlay(chosenCards?: Card[]): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this.myPlayer.ref.doc('data').ref.get().then(data => {
@@ -116,18 +116,6 @@ export class GameService {
         })
     }
 
-    getPointsForCard(card: Card): number {
-        if(card.value <= 10) {
-            return 5;
-        } else if(['J', 'Q', 'K'].indexOf(card.value.toString().toUpperCase()) >= 0) {
-            return 10;
-        } else if (card.value.toString().toUpperCase() === 'A') {
-            return 15;
-        } else {
-            return 0;
-        }
-    }
-
     throwCard(card?: Card) {
         this.myPlayer.ref.doc('data').ref.get().then(data => {
             const cards: Card[] = data.get('cards');
@@ -137,14 +125,6 @@ export class GameService {
                 this.addCardToTrash(card);
             });
         })
-    }
-
-    private addCardToTrash(card: Card) {
-        this.currentGame.ref.get().then(data => {
-            const currentTrash = data.get('trash');
-            currentTrash.push(card);
-            this.currentGame.ref.update({trash: currentTrash});
-        });
     }
 
     startGame(): Promise<{id: string, sub: Subscription}> {
@@ -160,7 +140,7 @@ export class GameService {
         });
     }
 
-    resumeCards() {
+    private resumeCards() {
         this.currentGame.ref.get().then(data => {
             this.myPlayer.ref = this.gamesRef.doc(this.currentGame.id).collection('asd123');
             this.myPlayer.observable = <Observable<Player>> this.myPlayer.ref.doc('data').valueChanges();
@@ -168,7 +148,7 @@ export class GameService {
         });
     }
 
-    dealCards() {
+    private dealCards() {
         const player1: Player = {
             cards: [],
             played: [],
@@ -212,5 +192,25 @@ export class GameService {
             }
             resolve(cards);
         });
+    }
+
+    private addCardToTrash(card: Card) {
+        this.currentGame.ref.get().then(data => {
+            const currentTrash = data.get('trash');
+            currentTrash.push(card);
+            this.currentGame.ref.update({trash: currentTrash});
+        });
+    }
+
+    private getPointsForCard(card: Card): number {
+        if(card.value <= 10) {
+            return 5;
+        } else if(['J', 'Q', 'K'].indexOf(card.value.toString().toUpperCase()) >= 0) {
+            return 10;
+        } else if (card.value.toString().toUpperCase() === 'A') {
+            return 15;
+        } else {
+            return 0;
+        }
     }
 }
