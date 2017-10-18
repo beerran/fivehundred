@@ -1,7 +1,8 @@
 export class Card {
     constructor(
         public value: number | string,
-        public suit: string
+        public suit: string,
+        public selected?: boolean
     ) { }
 
     public static GetValue(value: number | string) {

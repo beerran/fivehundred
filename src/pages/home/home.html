@@ -1,16 +1,44 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>fivehundred</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <card-hand [cards]="opponentCards" [back]="true"></card-hand>
+    <ion-card class="table">
+        <ion-card-content>
+          <span class="points">{{player.points}}</span>
+          <card-hand [cards]="player.played"></card-hand>
+        </ion-card-content>
+      </ion-card>
+
+  <card-hand [cards]="opponent.cards" [back]="true"></card-hand>
 
   <card-deck [amount]="deckRemaining" (onCardClick)="drawCard()"></card-deck>
 
   <card-deck [cards]="trash" (onCardClick)="pickupCard()"></card-deck>
 
-  <card-hand [cards]="playerCards" (onCardClick)="throwCard($event)" ></card-hand>
+  <card-hand [cards]="player.cards" (onCardClick)="actOnCard($event)" ></card-hand>
+
+  <ion-card class="table">
+    <ion-card-content>
+      <card-hand [cards]="player.played"></card-hand>
+      <span class="points">{{player.points}}</span>
+    </ion-card-content>
+  </ion-card>
+
+  <button ion-button color="danger" (click)="makePlay()">{{action === 'play' ? 'Make play' : 'Throw card'}}</button>
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-segment [(ngModel)]="action" color="danger">
+          <ion-segment-button value="throw" (click)="clearSelectedCards()">
+            Throw
+          </ion-segment-button>
+          <ion-segment-button value="play" (click)="clearSelectedCards()">
+            Play
+          </ion-segment-button>
+        </ion-segment>
+      </ion-toolbar>
+</ion-footer>

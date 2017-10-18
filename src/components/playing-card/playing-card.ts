@@ -14,7 +14,9 @@ export class PlayingCardComponent implements OnInit {
   constructor() { }
 
   getClasses() {
-    return this.back ? 'back' : `rank-${this.card.value} ${this.card.suit}`
+    let cssClass = this.back ? 'back' : `rank-${this.card.value} ${this.card.suit}`;
+    cssClass += this.card.selected ? ' selected' : '';
+    return cssClass;
   }
 
   ngOnInit() {

@@ -10,6 +10,7 @@ export class CardDeckComponent {
   private amountArray = [];
   @Input('amount')
   set amount(input: number) {
+    this.amountArray = [];
     for(let i = 0; i < input; i++) {
       this.amountArray.push(i);
     }

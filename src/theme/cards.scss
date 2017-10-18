@@ -49,13 +49,6 @@ $playingCards-hand-bottom-margin: 3.5em !default;
 
 /* selected and hover state */
 
-.playingCards a.card:hover,
-.playingCards span.card:hover,
-.playingCards label.card:hover,
-.playingCards a.card:active,
-.playingCards span.card:active,
-.playingCards a.card:focus,
-.playingCards span.card:focus,
 .playingCards a.card.selected,
 .playingCards span.card.selected,
 .playingCards strong .card {
@@ -552,7 +545,7 @@ only screen and (-device-pixel-ratio: 1) {
     font-family: Georgia, serif;
     position: absolute;
     font-size: 3em;
-    right: .1em;
+    right: .2em;
     bottom: .25em;
     word-spacing: normal;
     letter-spacing: normal;

@@ -34,6 +34,36 @@ export class GameService {
         this.gamesRef = fireStore.collection('games');        
     }
 
+    pickupCard() {
+        this.currentGame.ref.get().then(data => {
+            const trash: Card[] = data.get('trash');
+
+            this.myPlayer.ref.doc('data').ref.get().then(data => {
+                const cards: Card[] = data.get('cards');
+                if(cards.length > 0 && trash.length > 0) {
+                    cards.push(trash.pop());
+                    this.myPlayer.ref.doc('data').update({cards: cards});
+                    this.currentGame.ref.update({trash: trash});
+                }
+            });
+        });
+    }
+
+    drawCard() {
+        this.currentGame.ref.get().then(data => {
+            const deck: Card[] = data.get('deck');
+
+            this.myPlayer.ref.doc('data').ref.get().then(data => {
+                const cards: Card[] = data.get('cards');
+                if(cards.length > 0 && deck.length > 0) {
+                    cards.push(deck.shift());
+                    this.myPlayer.ref.doc('data').update({cards: cards});
+                    this.currentGame.ref.update({deck: deck});
+                }
+            });
+        });
+    }
+
     init() {
         this.startGame().then(data => {
             this.currentGame = {
@@ -41,34 +71,72 @@ export class GameService {
                 ref: <firebase.firestore.DocumentReference> this.gamesRef.doc(data.id).ref,
                 observable: <Observable<Game>> this.gamesRef.doc(data.id).valueChanges()
             };
-            this.currentGame.observable.subscribe(data => {
+            this.currentGame.observable.subscribe(data => {                
                 this.deckRemaining.next(data.deck.length);
                 this.trash.next(data.trash);
-            })
+            });
             data.sub.unsubscribe();
             this.dealCards();
         }).catch(error => console.log(error));
     }
 
-    throwCard(card?: Card) {
-        if (!card) {
-            this.myPlayer.ref.doc('data').ref.get().then(data => {            
-                const cards = data.get('cards');
-                card = cards[0];
-                cards.splice(0,1);
-                this.myPlayer.ref.doc('data').update({cards: cards});
-                this.addCardToTrash(card);          
-            });
-        } else {
+    resume(id: string) {
+        this.currentGame = {
+            id: id,
+            ref: <firebase.firestore.DocumentReference> this.gamesRef.doc(id).ref,
+            observable: <Observable<Game>> this.gamesRef.doc(id).valueChanges()
+        };
+        this.currentGame.observable.subscribe(data => {
+            this.deckRemaining.next(data.deck.length);
+            this.trash.next(data.trash);
+        });
+        this.resumeCards();
+    }
+
+    makePlay(chosenCards?: Card[]): Promise<boolean> {
+        return new Promise((resolve, reject) => {
             this.myPlayer.ref.doc('data').ref.get().then(data => {
                 const cards: Card[] = data.get('cards');
-                cards.splice(cards.findIndex(c => c.suit === card.suit && c.value === card.value), 1);
-                this.myPlayer.ref.doc('data').update({cards: cards});
-                this.currentGame.ref.get().then(data => {
-                    this.addCardToTrash(card);
+                const played: Card[] = data.get('played');
+                let playedNow: Card[] = [];
+                let points: number = data.get('points');
+    
+                cards.forEach(c => {
+                    const index = chosenCards.findIndex(cc => cc.value === c.value && cc.suit === c.suit);
+                    if (index >= 0) {
+                        played.push(c);
+                        playedNow.push(c);
+                        points += this.getPointsForCard(c);
+                    }
                 });
-            })
+                playedNow.forEach(p => cards.splice(cards.indexOf(p), 1));
+                this.myPlayer.ref.doc('data').update({cards: cards, played: played, points: points})
+                .then(() => resolve(true));
+            });
+        })
+    }
+
+    getPointsForCard(card: Card): number {
+        if(card.value <= 10) {
+            return 5;
+        } else if(['J', 'Q', 'K'].indexOf(card.value.toString().toUpperCase()) >= 0) {
+            return 10;
+        } else if (card.value.toString().toUpperCase() === 'A') {
+            return 15;
+        } else {
+            return 0;
         }
+    }
+
+    throwCard(card?: Card) {
+        this.myPlayer.ref.doc('data').ref.get().then(data => {
+            const cards: Card[] = data.get('cards');
+            cards.splice(cards.findIndex(c => c.suit === card.suit && c.value === card.value), 1);
+            this.myPlayer.ref.doc('data').update({cards: cards});
+            this.currentGame.ref.get().then(data => {
+                this.addCardToTrash(card);
+            });
+        })
     }
 
     private addCardToTrash(card: Card) {
@@ -92,6 +160,14 @@ export class GameService {
         });
     }
 
+    resumeCards() {
+        this.currentGame.ref.get().then(data => {
+            this.myPlayer.ref = this.gamesRef.doc(this.currentGame.id).collection('asd123');
+            this.myPlayer.observable = <Observable<Player>> this.myPlayer.ref.doc('data').valueChanges();
+            this.myPlayer.observable.subscribe(data => this.myPlayer.sub.next(<Player> data));
+        });
+    }
+
     dealCards() {
         const player1: Player = {
             cards: [],
@@ -108,6 +184,7 @@ export class GameService {
             const deck: Card[] = data.get('deck');
             player1.cards = deck.sort(() => 0.5 - Math.random()).splice(0,6);
             player2.cards = deck.sort(() => 0.5 - Math.random()).splice(0,6);
+            
             this.currentGame.ref.collection('asd123').doc('data').set(player1)
             .then((data) => {
                 this.myPlayer.ref = this.gamesRef.doc(this.currentGame.id).collection('asd123');
@@ -116,7 +193,7 @@ export class GameService {
                 this.currentGame.ref.collection('qwerty1337').doc('data').set(player2);
                 this.currentGame.ref.update({
                     deck: deck
-                }).then(() => this.throwCard());
+                });
             });
         });
     }
