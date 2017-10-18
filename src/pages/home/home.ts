@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
-import { Player } from '../../models/player.model';
+import { Player, Opponent } from '../../models/player.model';
 import { trigger, style, animate, transition, keyframes, state } from '@angular/animations';
 
 @Component({
@@ -33,8 +33,8 @@ export class HomePage implements OnInit {
     played: [],
     points: 0
   };
-  opponent: Player = {
-    cards: [],
+  opponent: Opponent = {
+    cardCount: 0,
     played: [],
     points: 0
   };
@@ -58,12 +58,17 @@ export class HomePage implements OnInit {
         this.player = data;
       }
     });
+    this.gameService.opponent.subscribe(data => {
+      if(data) {
+        this.opponent = data;
+      }
+    })
     this.gameService.trash.subscribe(data => this.trash = data);
     this.gameService.deckRemaining.subscribe(data => {
       this.deckRemaining = data;      
     });
     //this.gameService.init();
-    this.gameService.resume('5ZO5x0aVpyzPM1mecpPh');
+    this.gameService.resume('ybzVGmWnwk8bX5CkedFb');
   }
 
   drawCard() {

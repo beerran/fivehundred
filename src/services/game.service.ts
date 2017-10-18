@@ -7,7 +7,7 @@ import { FireModel } from '../models/fire.model';
 import * as firebase from 'firebase';
 import { Game } from '../models/game.model';
 import { Subscription } from 'rxjs/Subscription';
-import { Player } from '../models/player.model';
+import { Player, Opponent } from '../models/player.model';
 @Injectable()
 export class GameService {
     private currentGame: {
@@ -28,6 +28,13 @@ export class GameService {
         ref: null,
         observable: null
     };
+
+    public opponent: BehaviorSubject<Opponent> = new BehaviorSubject({
+        cardCount: 0,
+        points: 0,
+        played: []
+    });
+
     private gamesRef: AngularFirestoreCollection<Game>;
 
     constructor(private fireStore: AngularFirestore) {
@@ -135,6 +142,8 @@ export class GameService {
             const sub = this.fireStore.collection('cards').valueChanges().subscribe((cards: Card[]) => {
                 this.shuffleDeck(cards).then(shuffled => {
                     this.gamesRef.add({
+                        player1: 'asd123',
+                        player2: 'qwerty1337',
                         deck: cards,
                         trash: []
                     }).then(data => resolve({id: data.id, sub: sub})).catch(error => reject(sub));
@@ -145,9 +154,16 @@ export class GameService {
 
     private resumeCards() {
         this.currentGame.ref.get().then(data => {
-            this.myPlayer.ref = this.gamesRef.doc(this.currentGame.id).collection('asd123');
+            const player1id: string = data.get('player1');
+            const player2id: string = data.get('player2');
+            this.myPlayer.ref = this.gamesRef.doc(this.currentGame.id).collection(player1id);
             this.myPlayer.observable = <Observable<Player>> this.myPlayer.ref.doc('data').valueChanges();
             this.myPlayer.observable.subscribe(data => this.myPlayer.sub.next(<Player> data));
+
+            this.gamesRef.doc(this.currentGame.id).collection(player2id).doc('data')
+            .valueChanges().subscribe((opponent: Player) => {
+                this.opponent.next({cardCount: opponent.cards.length, points: opponent.points, played: opponent.played});
+            });
         });
     }
 
@@ -165,15 +181,23 @@ export class GameService {
 
         this.currentGame.ref.get().then(data => {
             const deck: Card[] = data.get('deck');
+            const player1id: string = data.get('player1');
+            const player2id: string = data.get('player2');
             player1.cards = deck.sort(() => 0.5 - Math.random()).splice(0,6);
             player2.cards = deck.sort(() => 0.5 - Math.random()).splice(0,6);
             
-            this.currentGame.ref.collection('asd123').doc('data').set(player1)
-            .then((data) => {
-                this.myPlayer.ref = this.gamesRef.doc(this.currentGame.id).collection('asd123');
+            this.currentGame.ref.collection(player1id).doc('data').set(player1)
+            .then(data => {
+                this.myPlayer.ref = this.gamesRef.doc(this.currentGame.id).collection(player1id);
                 this.myPlayer.observable = <Observable<Player>> this.myPlayer.ref.doc('data').valueChanges();
                 this.myPlayer.observable.subscribe(data => this.myPlayer.sub.next(<Player> data));
-                this.currentGame.ref.collection('qwerty1337').doc('data').set(player2);
+                this.currentGame.ref.collection(player2id).doc('data').set(player2)
+                .then(data => {
+                    this.gamesRef.doc(this.currentGame.id).collection(player2id).doc('data')
+                    .valueChanges().subscribe((opponent: Player) => {
+                        this.opponent.next({cardCount: opponent.cards.length, points: opponent.points, played: opponent.played});
+                    });
+                });
                 this.currentGame.ref.update({
                     deck: deck
                 });

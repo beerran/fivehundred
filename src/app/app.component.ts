@@ -4,7 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { Player } from '../models/player.model';
+import { Player, Opponent } from '../models/player.model';
 import { GameService } from '../services/game.service';
 
 @Component({
@@ -18,8 +18,8 @@ export class MyApp implements OnInit {
     played: [],
     points: 0
   };
-  opponent: Player = {
-    cards: [],
+  opponent: Opponent = {
+    cardCount: 0,
     played: [],
     points: 0
   };
@@ -41,5 +41,10 @@ export class MyApp implements OnInit {
         this.player = data;
       }
     });
+    this.gameService.opponent.subscribe(data => {
+      if(data) {
+        this.opponent = data;
+      }
+    })
   }
 }

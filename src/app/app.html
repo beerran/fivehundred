@@ -1,10 +1,10 @@
 <ion-menu [content]="mycontent" side="right">
-<ion-content *ngIf="player">
+<ion-content *ngIf="opponent">
     <ion-card class="table">
         <ion-card-header>Opponent</ion-card-header>
         <ion-card-content>            
-            <span class="points">{{player.points}}</span>
-            <card-hand [cards]="player.played"></card-hand>
+            <span class="points"><strong>Points:</strong> {{opponent.points}}</span>
+            <card-hand [cards]="opponent.played"></card-hand>
         </ion-card-content>
     </ion-card>
 
@@ -12,7 +12,7 @@
         <ion-card-header>Player</ion-card-header>
         <ion-card-content>
             <card-hand [cards]="player.played"></card-hand>
-            <span class="points">{{player.points}}</span>
+            <span class="points"><strong>Points:</strong> {{player.points}}</span>
         </ion-card-content>
     </ion-card>
 </ion-content>

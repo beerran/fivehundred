@@ -5,28 +5,38 @@
 </ion-header>
 
 <ion-content padding>
-  <card-hand [cards]="opponent.cards" [back]="true"></card-hand>
-
-  <card-deck [amount]="deckRemaining" (onCardClick)="drawCard()"></card-deck>
-
-  <card-deck [cards]="trash" (onCardClick)="pickupCard()"></card-deck>
-
-  <card-hand [cards]="player.cards" (onCardClick)="actOnCard($event)"></card-hand>
-
-  <button ion-button color="danger" (click)="makePlay()">{{action === 'play' ? 'Make play' : 'Throw card'}}</button>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+        <card-hand [amount]="opponent.cardCount" [back]="true"></card-hand>  
+      </ion-col>
+      <ion-col col-6>
+        <card-deck [amount]="deckRemaining" (onCardClick)="drawCard()"></card-deck>      
+      </ion-col>
+      <ion-col col-6>
+        <card-deck [cards]="trash" (onCardClick)="pickupCard()"></card-deck>
+      </ion-col>
+      <ion-col col-12>
+        <card-hand [cards]="player.cards" (onCardClick)="actOnCard($event)"></card-hand>
+      </ion-col>
+      <ion-col col-6 offset-3>
+        <button ion-button block color="danger" (click)="makePlay()" icon-start><ion-icon [name]="action === 'play' ? 'arrow-dropup' : 'trash'"></ion-icon> {{action === 'play' ? 'Make play' : 'Throw card'}}</button>          
+      </ion-col>
+    </ion-row>
+  </ion-grid>  
 </ion-content>
 
 <ion-footer>
-    <ion-toolbar>
-        <ion-segment [(ngModel)]="action" color="danger">
-          <ion-segment-button value="throw" (click)="clearSelectedCards()">
-            Throw
-          </ion-segment-button>
-          <ion-segment-button value="play" (click)="clearSelectedCards()">
-            Play
-          </ion-segment-button>
-        </ion-segment>
-      </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="action" color="danger">
+      <ion-segment-button value="throw" (click)="clearSelectedCards()">
+        Throw
+      </ion-segment-button>
+      <ion-segment-button value="play" (click)="clearSelectedCards()">
+        Play
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-footer>
 
 <ion-fab right middle class="points-indicator">

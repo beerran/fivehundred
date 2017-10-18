@@ -12,7 +12,13 @@ ion-card.table {
         span.points {
             font-size: 2rem;
             color: #a92144;
-            text-shadow: 2px 2px 1px rgba(#a92144,0.5);
+            text-shadow: 2px 2px 1px rgba(darken(#a92144, 15%), 0.5);
+
+            strong {
+                font-weight: 400;
+                color: #f1f1f1;
+                text-shadow: 2px 2px 1px rgba(#000, 0.5);
+            }
         }
         card-hand .playingCards ul.hand {
             margin-bottom: 0;

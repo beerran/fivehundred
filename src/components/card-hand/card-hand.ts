@@ -19,10 +19,21 @@ import { trigger, style, animate, transition, keyframes, state } from '@angular/
   ]
 })
 export class CardHandComponent {
+  private amountArray = [];
+  @Input('amount')
+  set amount(input: number) {
+    this.amountArray = [];
+    for(let i = 0; i < input; i++) {
+      this.amountArray.push(i);
+    }
+  }
   @Input() cards: Card[] = [];
   @Input() back = false;
   @Input() fan = false;
   @Output() onCardClick: EventEmitter<Card> = new EventEmitter<Card>();  
+
+  private card = new Card('','');
+  
   constructor() { }
 
   cardClicked(card: Card) {
