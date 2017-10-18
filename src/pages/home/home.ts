@@ -3,10 +3,29 @@ import { NavController } from 'ionic-angular';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
 import { Player } from '../../models/player.model';
+import { trigger, style, animate, transition, keyframes, state } from '@angular/animations';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  animations: [
+    trigger('pointsAnimation', [
+      state('show', style({ opacity: 1, transform: 'scale(1.5) translateX(-5px) translateY(-10px) rotate(-15deg)' })),
+      state('hide', style({ opacity: 0 })),
+      transition('* => show', [
+        animate(500, keyframes([
+          style({opacity: 0, offset: 0}),          
+          style({opacity: 1, transform: 'scale(1.5) translateX(-5px) translateY(-10px) rotate(-15deg)', offset: 1.0})
+        ]))
+      ]),
+      transition('show => hide', [
+        animate(300, keyframes([
+          style({opacity: 1, offset: 0}),
+          style({opacity: 0, offset: 1.0})
+        ]))
+      ])
+    ])
+  ]
 })
 export class HomePage implements OnInit {
   player: Player = {
@@ -22,13 +41,15 @@ export class HomePage implements OnInit {
 
   trash: Card[] = [];
   deckRemaining: number;
+  showPoints = 'hide';
 
   action = 'play';
   cardsToPlay: Card[] = [];
+  pointsAdded = 0;
 
   constructor(
     public navCtrl: NavController,
-    private gameService: GameService
+    private gameService: GameService    
   ) { }
 
   ngOnInit() {
@@ -42,7 +63,7 @@ export class HomePage implements OnInit {
       this.deckRemaining = data;      
     });
     //this.gameService.init();
-    this.gameService.resume('MMeLIRjjNydxRzsAg6Yz');
+    this.gameService.resume('5ZO5x0aVpyzPM1mecpPh');
   }
 
   drawCard() {
@@ -54,12 +75,18 @@ export class HomePage implements OnInit {
   }
 
   makePlay() {
-    if (this.action === 'play' && this.cardsToPlay.length >= 1) {
+    if (this.action === 'play' && this.cardsToPlay.length >= 2) {
       this.cardsToPlay.forEach(c => c.state = 'inactive');
       setTimeout(() => {
-        this.gameService.makePlay(this.cardsToPlay).then(() => this.clearSelectedCards());
+        this.gameService.makePlay(this.cardsToPlay).then((points) => {
+          this.pointsAdded = points;
+          this.clearSelectedCards();
+          this.showPoints = 'show';
+          setTimeout(() => this.showPoints = 'hide', 500);
+        });
       }, 500);      
     } else if (this.action === 'throw' && this.cardsToPlay.length === 1) {
+      this.cardsToPlay.forEach(c => c.selected = false);
       this.gameService.throwCard(this.cardsToPlay[0]);
     }
   }

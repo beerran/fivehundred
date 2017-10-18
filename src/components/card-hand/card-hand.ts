@@ -6,7 +6,7 @@ import { trigger, style, animate, transition, keyframes, state } from '@angular/
   selector: 'card-hand',
   templateUrl: 'card-hand.html',
   animations: [
-    trigger('flyInOut', [
+    trigger('flyOut', [
       state('inactive', style({ transform: 'translateY(50px)', position: 'absolute', left: 'calc(100% + 3.3em)' })),
       transition('* => inactive', [
         animate(500, keyframes([

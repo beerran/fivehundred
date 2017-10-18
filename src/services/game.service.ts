@@ -93,37 +93,40 @@ export class GameService {
         });
     }
 
-    makePlay(chosenCards?: Card[]): Promise<boolean> {
+    makePlay(chosenCards?: Card[]): Promise<number> {
         return new Promise((resolve, reject) => {
             this.myPlayer.ref.doc('data').ref.get().then(data => {
                 const cards: Card[] = data.get('cards');
                 const played: Card[] = data.get('played');
                 let playedNow: Card[] = [];
-                let points: number = data.get('points');
-    
+                let oldPoints: number = data.get('points');
+                let newPoints = 0;
+
                 cards.forEach(c => {
                     const index = chosenCards.findIndex(cc => cc.value === c.value && cc.suit === c.suit);
                     if (index >= 0) {
                         played.push(c);
                         playedNow.push(c);
-                        points += this.getPointsForCard(c);
+                        newPoints += this.getPointsForCard(c);
                     }
                 });
                 playedNow.forEach(p => cards.splice(cards.indexOf(p), 1));
-                this.myPlayer.ref.doc('data').update({cards: cards, played: played, points: points})
-                .then(() => resolve(true));
+                this.myPlayer.ref.doc('data').update({cards: cards, played: played, points: oldPoints + newPoints})
+                .then(() => resolve(newPoints));
             });
         })
     }
 
-    throwCard(card?: Card) {
-        this.myPlayer.ref.doc('data').ref.get().then(data => {
-            const cards: Card[] = data.get('cards');
-            cards.splice(cards.findIndex(c => c.suit === card.suit && c.value === card.value), 1);
-            this.myPlayer.ref.doc('data').update({cards: cards});
-            this.currentGame.ref.get().then(data => {
-                this.addCardToTrash(card);
-            });
+    throwCard(card?: Card): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.myPlayer.ref.doc('data').ref.get().then(data => {
+                const cards: Card[] = data.get('cards');
+                cards.splice(cards.findIndex(c => c.suit === card.suit && c.value === card.value), 1);
+                this.myPlayer.ref.doc('data').update({cards: cards});
+                this.currentGame.ref.get().then(data => {
+                    this.addCardToTrash(card).then(() => resolve(true));
+                });
+            })
         })
     }
 
@@ -194,12 +197,16 @@ export class GameService {
         });
     }
 
-    private addCardToTrash(card: Card) {
-        this.currentGame.ref.get().then(data => {
-            const currentTrash = data.get('trash');
-            currentTrash.push(card);
-            this.currentGame.ref.update({trash: currentTrash});
-        });
+    private addCardToTrash(card: Card): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.currentGame.ref.get().then(data => {
+                const currentTrash = data.get('trash');
+                currentTrash.push(card);
+                this.currentGame.ref.update({trash: currentTrash}).then(() => {
+                    resolve(true);
+                });
+            });
+        })
     }
 
     private getPointsForCard(card: Card): number {

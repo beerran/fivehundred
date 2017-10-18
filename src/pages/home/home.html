@@ -28,3 +28,7 @@
         </ion-segment>
       </ion-toolbar>
 </ion-footer>
+
+<ion-fab right middle class="points-indicator">
+  <button ion-fab color="secondary" [@pointsAnimation]="showPoints">+{{pointsAdded}}</button>
+</ion-fab>

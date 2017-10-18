@@ -45,7 +45,7 @@ const firebaseConfig = {
     HomePage
   ],
   providers: [
-    GameService,
+    GameService,    
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
