@@ -213,4 +213,27 @@ export class GameService {
             return 0;
         }
     }
+
+    private fillCards() {
+        const cards: Card[] = this.getAllCards();
+        cards.forEach(card => {
+            this.fireStore.collection('cards').add(card);
+        });
+    }
+
+    private getAllCards() {
+        const allValues = [1,2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
+        const allSuits = ['spades', 'diamonds', 'clubs', 'hearts'];
+        const cards = [];
+        allSuits.forEach(suit => {
+            allValues.forEach(value => {
+                const x: Card = {
+                    suit: suit,
+                    value: value
+                };
+                cards.push(x);
+            })
+        });
+        return cards;
+    }
 }

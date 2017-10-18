@@ -41,8 +41,8 @@ export class HomePage implements OnInit {
     this.gameService.deckRemaining.subscribe(data => {
       this.deckRemaining = data;      
     });
-    this.gameService.init();
-    // this.gameService.resume('0ZHy2PxkCgSITgd3hTY0');
+    //this.gameService.init();
+    this.gameService.resume('MMeLIRjjNydxRzsAg6Yz');
   }
 
   drawCard() {
@@ -54,8 +54,11 @@ export class HomePage implements OnInit {
   }
 
   makePlay() {
-    if (this.action === 'play' && this.cardsToPlay.length >= 2) {
-      this.gameService.makePlay(this.cardsToPlay).then(() => this.clearSelectedCards());
+    if (this.action === 'play' && this.cardsToPlay.length >= 1) {
+      this.cardsToPlay.forEach(c => c.state = 'inactive');
+      setTimeout(() => {
+        this.gameService.makePlay(this.cardsToPlay).then(() => this.clearSelectedCards());
+      }, 500);      
     } else if (this.action === 'throw' && this.cardsToPlay.length === 1) {
       this.gameService.throwCard(this.cardsToPlay[0]);
     }

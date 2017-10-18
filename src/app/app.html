@@ -1,1 +1,20 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="mycontent" side="right">
+<ion-content *ngIf="player">
+    <ion-card class="table">
+        <ion-card-header>Opponent</ion-card-header>
+        <ion-card-content>            
+            <span class="points">{{player.points}}</span>
+            <card-hand [cards]="player.played"></card-hand>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="table">
+        <ion-card-header>Player</ion-card-header>
+        <ion-card-content>
+            <card-hand [cards]="player.played"></card-hand>
+            <span class="points">{{player.points}}</span>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
+</ion-menu>
+<ion-nav #mycontent [root]="rootPage"></ion-nav>

@@ -8,7 +8,7 @@ import { Card } from '../../models/card.model';
 export class PlayingCardComponent implements OnInit {
   @Input() card: Card;
   @Input() back = false;
-  @Output() onCardClick: EventEmitter<Card> = new EventEmitter<Card>(null);
+  @Output() onCardClick: EventEmitter<Card> = new EventEmitter<Card>(null);  
   
   private suitIcon: string;
   constructor() { }
