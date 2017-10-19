@@ -8,7 +8,6 @@
 
 <div class="playingCards faceImages" id="cards" *ngIf="cards && cards.length > 0">
     <ul class="deck">
-        {{cards | json}}
         <li *ngFor="let item of (cards ? cards.length <= 10 ? cards : cards.slice(cards.length - 11, cards.length) : [])">
             <playing-card [card]="item" (onCardClick)="cardClicked($event)"></playing-card>
         </li>
