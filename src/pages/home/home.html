@@ -20,7 +20,7 @@
         <card-hand [cards]="player.cards" (onCardClick)="actOnCard($event)"></card-hand>
       </ion-col>
       <ion-col col-6 offset-3>
-        <button ion-button block color="danger" (click)="makePlay()" icon-start><ion-icon [name]="action === 'play' ? 'arrow-dropup' : 'trash'"></ion-icon> {{action === 'play' ? 'Make play' : 'Throw card'}}</button>          
+        <button ion-button block color="primary" (click)="makePlay()" icon-start><ion-icon [name]="action === 'play' ? 'arrow-dropup' : 'trash'"></ion-icon> {{action === 'play' ? 'Make play' : 'Throw card'}}</button>          
       </ion-col>
     </ion-row>
   </ion-grid>  
@@ -28,7 +28,7 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-segment [(ngModel)]="action" color="danger">
+    <ion-segment [(ngModel)]="action" color="primary">
       <ion-segment-button value="throw" (click)="clearSelectedCards()">
         Throw
       </ion-segment-button>

@@ -1,4 +1,5 @@
 @import 'cards';
+@import 'variables';
 
 ion-content {
     background-image: url(/assets/img/bg.jpg);
@@ -11,8 +12,8 @@ ion-card.table {
     ion-card-content {
         span.points {
             font-size: 2rem;
-            color: #a92144;
-            text-shadow: 2px 2px 1px rgba(darken(#a92144, 15%), 0.5);
+            color: map-get($colors, primary);
+            text-shadow: 2px 2px 1px rgba(darken(map-get($colors, primary), 15%), 0.5);
 
             strong {
                 font-weight: 400;

@@ -1,3 +1,5 @@
+@import 'variables';
+
 /**
  * Styles for CSS Playing Cards
  *
@@ -14,8 +16,11 @@ $card-font-size: 1.2em !default;
 $card-background-image: 'data:image/gif;base64,R0lGODlhJAAkAJEAAOjFsezdztOKbL5QKCH5BAAAAAAALAAAAAAkACQAAAL/HC4RAqm/mmLHyHmAbczB11Ea8ombJKSgKo6Z17pXFznmS1JptiX0z3vVhpEKDoUIkoa0olGIUeZUk1RI6Yn2mh/FDAt6frOrRRTqXPpsVLYugzxaVy+YcBdnoWPZOT0E4eckQtZFZBjWoHixQFWl6Nhol6R2p1Okt5TGaEWZA6fjiMdhZgPHeWrTWGVq+jTZg1HYyAEWKLYzmyiGKoUimilz+YYryyTlg5RcDJSAbNx0Q7lMcbIGEyzTK8zVdfVaImzs/QV+prYqWWW2ObkoOApM/Em/rUlIm7fijs8a2EEKEaZ3AsMUgneEU6RcpJbZ27aGHkAO2Ors8xQH1IR0Bn5YnOtVAAA7' !default;
 $enable-webkit-background: true !default;
 $enable-mozilla-background: true !default;
+$enable-css-background: true !default;
+$css-background: radial-gradient(map-get($colors, primary), darken(map-get($colors, primary), 15%));
 $playingCards-hand-bottom-margin: 3.5em !default;
 
+$card-shadow-color: darken(map-get($colors, primary), 30%);
 /* card itself
  ********************************************************************/
 
@@ -23,11 +28,11 @@ $playingCards-hand-bottom-margin: 3.5em !default;
     display: inline-block;
     width: 3.3em;
     height: 4.6em;
-    border: 1px solid #666;
-    border-radius: .3em;
-    -moz-border-radius: .3em;
-    -webkit-border-radius: .3em;
-    -khtml-border-radius: .3em;
+    border: 1px solid darken(map-get($colors, primary), 20%);
+    border-radius: .5em;
+    -moz-border-radius: .5em;
+    -webkit-border-radius: .5em;
+    -khtml-border-radius: .5em;
     padding: .25em;
     margin: 0 .5em .5em 0;
     text-align: center;
@@ -37,9 +42,10 @@ $playingCards-hand-bottom-margin: 3.5em !default;
     font-family: Arial, sans-serif;
     position: relative;
     background-color: #fff;
-    -moz-box-shadow: .2em .2em .5em #333;
-    -webkit-box-shadow: .2em .2em .5em #333;
-    box-shadow: .2em .2em .5em #333;
+    -moz-box-shadow: .2em .2em .5em rgba($card-shadow-color, 0.5);
+    -webkit-box-shadow: .2em .2em .5em rgba($card-shadow-color, 0.5);
+    box-shadow: .2em .2em .5em rgba($card-shadow-color, 0.5);
+    overflow: hidden;
 }
 
 .playingCards a.card {
@@ -65,11 +71,8 @@ $playingCards-hand-bottom-margin: 3.5em !default;
     background-color: #ccc;
     background-repeat: repeat;
     background-image: url($card-background-image);
-    @if $enable-webkit-background {
-        background-image: -webkit-gradient(radial, center center, 20, center center, 80, from(#3c3), color-stop(0.4, #363), to(#030));
-    }
-    @if $enable-mozilla-background {
-        background-image: -moz-repeating-linear-gradient(34% 6% 135deg, #0F1E59, #75A1BF, #3E3E63 50%);
+    @if $enable-css-background {
+        background: $css-background;
     }
     /* yes, it's intentional that Mozilla, Webkit, Opera and IE all will get different backgrounds ... why not? :) */
 }
@@ -79,7 +82,7 @@ $playingCards-hand-bottom-margin: 3.5em !default;
  ********************************************************************/
 
 .playingCards .card.diamonds {
-    color: #f00 !important;
+    color: map-get($colors, primary);
 }
 
 .playingCards.fourColours .card.diamonds {
@@ -91,11 +94,11 @@ $playingCards-hand-bottom-margin: 3.5em !default;
 }
 
 .playingCards .card.hearts {
-    color: #f00 !important;
+    color: map-get($colors, primary);
 }
 
 .playingCards .card.spades {
-    color: #000 !important;
+    color: map-get($colors, dark) !important;
 }
 
 [lang=de] .playingCards.fourColours .card.spades {
@@ -103,7 +106,7 @@ $playingCards-hand-bottom-margin: 3.5em !default;
 }
 
 .playingCards .card.clubs {
-    color: #000 !important;
+    color: map-get($colors, dark) !important;
 }
 
 .playingCards.fourColours .card.clubs {
@@ -111,15 +114,15 @@ $playingCards-hand-bottom-margin: 3.5em !default;
 }
 
 [lang=de] .playingCards.fourColours .card.clubs {
-    color: #000 !important;
+    color: map-get($colors, dark) !important;
 }
 
 .playingCards .card.joker {
-    color: #000 !important;
+    color: map-get($colors, dark) !important;
 }
 
 .playingCards .card.joker.big {
-    color: #f00 !important;
+    color: map-get($colors, primary);
 }
 
 
@@ -134,6 +137,16 @@ $playingCards-hand-bottom-margin: 3.5em !default;
     display: block;
     line-height: 1;
     text-align: left;
+
+    .suit-icon {
+        &.hearts, &.diamonds {
+            color: rgba(map-get($colors, primary), 0.5);
+        }
+        &.spades, &.clubs {
+            color: rgba(map-get($colors, dark), 0.5);
+        }
+    }
+    
 }
 
 .playingCards .card .rank {}
@@ -282,6 +295,9 @@ only screen and (-device-pixel-ratio: 1) {
 
 
 /* diamonds */
+.playingCards .card.rank-1.diamonds .suit:after {
+    content: "\A\2666";
+}
 
 .playingCards .card.rank-2.diamonds .suit:after {
     content: "\2666 \A\A\2666";
@@ -321,6 +337,9 @@ only screen and (-device-pixel-ratio: 1) {
 
 
 /* hearts */
+.playingCards .card.rank-1.hearts .suit:after {
+    content: "\A\2665";
+}
 
 .playingCards .card.rank-2.hearts .suit:after {
     content: "\2665 \A\A\2665";
@@ -360,6 +379,9 @@ only screen and (-device-pixel-ratio: 1) {
 
 
 /* spades */
+.playingCards .card.rank-1.spades .suit:after {
+    content: "\A\2660";
+}
 
 .playingCards .card.rank-2.spades .suit:after {
     content: "\2660 \A\A\2660";
@@ -399,6 +421,10 @@ only screen and (-device-pixel-ratio: 1) {
 
 
 /* clubs */
+
+.playingCards .card.rank-1.clubs .suit:after {
+    content: "\A\2663";
+}
 
 .playingCards .card.rank-2.clubs .suit:after {
     content: "\2663 \A\A\2663";
@@ -694,7 +720,7 @@ only screen and (-device-pixel-ratio: 1) {
 
 @for $i from 0 through 25 {
     .playingCards ul.hand li:nth-child(#{$i+1}) {
-        left: #{$i * 1.1}em;
+        left: #{$i * 1.5}em;
     }
     #player1,
     #player2 {

@@ -22,7 +22,11 @@ export class CardDeckComponent {
 
   constructor() { }
 
-  cardClicked() {
+  cardClicked() {        
     this.onCardClick.emit(true);
+  }
+
+  getTopTen(array: any[]) {
+    return array.length <= 10 ? array : array.splice(array.length - 11, array.length);
   }
 }

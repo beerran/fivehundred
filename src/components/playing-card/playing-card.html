@@ -2,6 +2,6 @@
     <div *ngIf="back; else showValues">*</div>
     <ng-template #showValues>
         <span class="rank">{{card.value}}</span>
-        <span class="suit">{{suitIcon}}</span>
+        <span class="suit"><span class="suit-icon" [ngClass]="card.suit">{{suitIcon}}</span></span>
     </ng-template>
 </a>

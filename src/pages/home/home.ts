@@ -68,7 +68,7 @@ export class HomePage implements OnInit {
       this.deckRemaining = data;      
     });
     //this.gameService.init();
-    this.gameService.resume('ybzVGmWnwk8bX5CkedFb');
+    this.gameService.resume('mJuEJq7FLyyh1sXVOuCM');
   }
 
   drawCard() {
