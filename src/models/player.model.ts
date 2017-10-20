@@ -9,6 +9,7 @@ export interface Opponent extends Part {
 }
 
 interface Part {
+    id: string;
     points: number;
     played: Card[];
 }

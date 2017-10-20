@@ -1,3 +1,6 @@
+@import '../../theme/variables';
+@import '../../theme/mixins';
+
 page-home {
     .scroll-content {
         overflow: hidden;
@@ -6,4 +9,100 @@ page-home {
 
 .points-indicator button span.button-inner {
     font-size: 2rem !important;
+}
+
+.winner-notification, .loser-notification {
+    display:block;
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height: 100vh;
+    z-index: 99;
+    background: rgba(map-get($colors, dark), 0.66);
+}
+
+.winner-notification {
+    $color: map-get($colors, secondary);
+    p {
+        @include bigtext($color);
+    }
+}
+
+.loser-notification {
+    $color: map-get($colors, primary);
+    p {
+        @include bigtext($color);
+    }
+}
+
+
+
+.pyro {
+    margin-top:calc((100vh / 2));
+}
+$particles: 50;
+$width: 1080;
+$height: 1920;
+
+
+$box-shadow: ();
+$box-shadow2: ();
+@for $i from 0 through $particles {
+  $box-shadow: $box-shadow,
+               random($width)-$width / 2 + px
+               random($height)-$height / 1.2 + px
+               hsl(random(360), 100, 50);
+  $box-shadow2: $box-shadow2, 0 0 #fff
+}
+
+
+.pyro > .before, .pyro > .after {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  box-shadow: $box-shadow2;
+  @include animation((1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards));
+}
+    
+.pyro > .after {
+  @include animation-delay((1.25s, 1.25s, 1.25s));
+  @include animation-duration((1.25s, 1.25s, 6.25s));
+}
+        
+@include keyframes(bang) {
+  to {
+    box-shadow:$box-shadow;
+  }
+}
+    
+@include keyframes(gravity)  {
+  to {
+    @include transform(translateY(200px));
+    opacity: 0;
+  }
+}
+    
+@include keyframes(position) {
+  0%, 19.9% {
+    margin-top: 10%;
+    margin-left: 40%;
+  }
+  20%, 39.9% {
+    margin-top: 40%;
+    margin-left: 30%;
+  }
+  40%, 59.9% {  
+    margin-top: 20%;
+    margin-left: 70%
+  }
+  60%, 79.9% {  
+    margin-top: 30%;
+    margin-left: 20%;
+  }
+  80%, 99.9% {  
+    margin-top: 30%;
+    margin-left: 80%;
+  }
 }

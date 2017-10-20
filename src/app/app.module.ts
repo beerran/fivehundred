@@ -15,6 +15,7 @@ import { GameService } from '../services/game.service';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { LoadingService } from '../services/loading.service';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnF1gkHwtYuXx2s7r6y-tNC_OBlPyfXoI",
@@ -45,7 +46,8 @@ const firebaseConfig = {
     HomePage
   ],
   providers: [
-    GameService,    
+    GameService,
+    LoadingService,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
