@@ -18,12 +18,12 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { LoadingService } from '../services/loading.service';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAnF1gkHwtYuXx2s7r6y-tNC_OBlPyfXoI",
-  authDomain: "fivehundred-4a7aa.firebaseapp.com",
-  databaseURL: "https://fivehundred-4a7aa.firebaseio.com",
-  projectId: "fivehundred-4a7aa",
+  apiKey: "-----",
+  authDomain: "-----",
+  databaseURL: "-----",
+  projectId: "-----",
   storageBucket: "",
-  messagingSenderId: "591905384447"
+  messagingSenderId: "-----"
 };
 
 @NgModule({
