@@ -92,8 +92,9 @@ export class HomePage implements OnInit {
       }
     });
 
-    //this.gameService.init();
-    this.gameService.resume('oGpIuRGCjRs6RBYomkO0');
+    //this.gameService.fillCards();
+    this.gameService.init();
+    //this.gameService.resume('umkihmni6vP5D7fdMos9');
   }
 
   drawCard() {
@@ -137,10 +138,11 @@ export class HomePage implements OnInit {
   }
 
   getState() {
-    return `${GameState[this.gameInfo.state]} : ${this.gameInfo.state}`
+    return `${GameState[this.gameInfo.state]} : ${this.gameInfo.state}`;
   }
+
   makePlay() {
-    if (this.action === 'play' && (this.cardsToPlay.length >= 2 || this.alreadyInPlayed(this.cardsToPlay[0]))) {
+    if (this.action === 'play' && (this.cardsToPlay.length >= 3 || this.alreadyInPlayed(this.cardsToPlay[0]))) {
       this.cardsToPlay.forEach(c => c.state = 'inactive');
       setTimeout(() => {
         this.gameService.makePlay(this.cardsToPlay).then((points) => {
@@ -157,7 +159,6 @@ export class HomePage implements OnInit {
       });
     }
   }
-
 
   alreadyInPlayed(card: Card) {
     return this.player.played.filter(c => c.value === card.value).length > 0;

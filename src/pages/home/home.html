@@ -18,14 +18,6 @@
   <ion-grid>
     <ion-row>
       <ion-col col-12>
-        <h1>
-            {{ player.id }} {{ getState() }} 
-        </h1>
-        <h2 (click)="devSwitch()">Switch player</h2>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-12>
         <card-hand [amount]="opponent?.cardCount" [back]="true"></card-hand>  
       </ion-col>
       <ion-col col-6>
@@ -41,7 +33,7 @@
         <button ion-button block color="primary" (click)="makePlay()" [disabled]="!inState('MyPlayTurn') && !inState('MyThrowTurn')" icon-start><ion-icon [name]="action === 'play' ? 'arrow-dropup' : 'trash'"></ion-icon> {{action === 'play' ? 'Make play' : 'Throw card'}}</button>          
       </ion-col>
       <ion-col col-3>
-          <button ion-button block color="light" (click)="passTurn()" [disabled]="!inState('MyPlayTurn')" icon-start><ion-icon name="trash"></ion-icon> Pass</button>          
+          <button ion-button block color="light" (click)="passTurn()" [disabled]="!inState('MyPlayTurn')" icon-start>Done</button>          
       </ion-col>
     </ion-row>
   </ion-grid>  
@@ -63,3 +55,8 @@
 <ion-fab right middle class="points-indicator">
   <button ion-fab color="secondary" [@pointsAnimation]="showPoints">+{{pointsAdded}}</button>
 </ion-fab>
+
+<ion-fab right top>
+    <button ion-fab color="primary" (click)="devSwitch()">Switch</button>
+</ion-fab>
+  

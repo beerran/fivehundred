@@ -264,8 +264,8 @@ export class GameService {
                 points: 0
             }
 
-            player1.cards = deck.sort(() => 0.5 - Math.random()).splice(0, 6);
-            player2.cards = deck.sort(() => 0.5 - Math.random()).splice(0, 6);
+            player1.cards = deck.sort(() => 0.5 - Math.random()).splice(0, 7);
+            player2.cards = deck.sort(() => 0.5 - Math.random()).splice(0, 7);
 
             this.currentGame.ref.collection(player1id).doc('data').set(player1)
                 .then(data => {
@@ -340,26 +340,26 @@ export class GameService {
 
     // -- Dev: Fill Firestore Cards collection
     //
-    // private fillCards() {
-    //     const cards: Card[] = this.getAllCards();
-    //     cards.forEach(card => {
-    //         this.fireStore.collection('cards').add(card);
-    //     });
-    // }
+    fillCards() {
+        const cards: Card[] = this.getAllCards();
+        cards.forEach(card => {
+            this.fireStore.collection('cards').add(card);
+        });
+    }
 
-    // private getAllCards() {
-    //     const allValues = [1,2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
-    //     const allSuits = ['spades', 'diamonds', 'clubs', 'hearts'];
-    //     const cards = [];
-    //     allSuits.forEach(suit => {
-    //         allValues.forEach(value => {
-    //             const x: Card = {
-    //                 suit: suit,
-    //                 value: value
-    //             };
-    //             cards.push(x);
-    //         })
-    //     });
-    //     return cards;
-    // }
+    private getAllCards() {
+        const allValues = [2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
+        const allSuits = ['spades', 'diamonds', 'clubs', 'hearts'];
+        const cards = [];
+        allSuits.forEach(suit => {
+            allValues.forEach(value => {
+                const x: Card = {
+                    suit: suit,
+                    value: value
+                };
+                cards.push(x);
+            })
+        });
+        return cards;
+    }
 }
