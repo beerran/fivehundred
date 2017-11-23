@@ -96,34 +96,42 @@ export class GameService {
         this.resumeCards();
     }
 
-    pickupCard() {
-        this.currentGame.ref.get().then(data => {
-            const trash: Card[] = data.get('trash');
-
-            this.myPlayer.ref.doc('data').ref.get().then(data => {
-                const cards: Card[] = data.get('cards');
-                if (cards.length > 0 && trash.length > 0) {
-                    cards.push(trash.pop());
-                    this.myPlayer.ref.doc('data').update({ cards: cards });
-                    this.currentGame.ref.update({ trash: trash }).then(() => this.moveStateForward());
-                }
+    pickupCard(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.currentGame.ref.get().then(data => {
+                const trash: Card[] = data.get('trash');
+    
+                this.myPlayer.ref.doc('data').ref.get().then(data => {
+                    const cards: Card[] = data.get('cards');
+                    if (cards.length > 0 && trash.length > 0) {
+                        cards.push(trash.pop());
+                        this.myPlayer.ref.doc('data').update({ cards: cards });
+                        this.currentGame.ref.update({ trash: trash }).then(() => 
+                            this.moveStateForward().then(() => resolve(true))
+                        );
+                    }
+                });
             });
-        });
+        })
     }
 
-    drawCard() {
-        this.currentGame.ref.get().then(data => {
-            const deck: Card[] = data.get('deck');
-
-            this.myPlayer.ref.doc('data').ref.get().then(data => {
-                const cards: Card[] = data.get('cards');
-                if (cards.length > 0 && deck.length > 0) {
-                    cards.push(deck.shift());
-                    this.myPlayer.ref.doc('data').update({ cards: cards });
-                    this.currentGame.ref.update({ deck: deck }).then(() => this.moveStateForward());
-                }
+    drawCard(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.currentGame.ref.get().then(data => {
+                const deck: Card[] = data.get('deck');
+    
+                this.myPlayer.ref.doc('data').ref.get().then(data => {
+                    const cards: Card[] = data.get('cards');
+                    if (cards.length > 0 && deck.length > 0) {
+                        cards.push(deck.shift());
+                        this.myPlayer.ref.doc('data').update({ cards: cards });
+                        this.currentGame.ref.update({ deck: deck }).then(() => 
+                            this.moveStateForward().then(() => resolve(true))
+                        );
+                    }
+                });
             });
-        });
+        })
     }
 
     makePlay(chosenCards?: Card[]): Promise<number> {
@@ -339,27 +347,27 @@ export class GameService {
     }
 
     // -- Dev: Fill Firestore Cards collection
-    //
-    fillCards() {
-        const cards: Card[] = this.getAllCards();
-        cards.forEach(card => {
-            this.fireStore.collection('cards').add(card);
-        });
-    }
+    
+    // fillCards() {
+    //     const cards: Card[] = this.getAllCards();
+    //     cards.forEach(card => {
+    //         this.fireStore.collection('cards').add(card);
+    //     });
+    // }
 
-    private getAllCards() {
-        const allValues = [2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
-        const allSuits = ['spades', 'diamonds', 'clubs', 'hearts'];
-        const cards = [];
-        allSuits.forEach(suit => {
-            allValues.forEach(value => {
-                const x: Card = {
-                    suit: suit,
-                    value: value
-                };
-                cards.push(x);
-            })
-        });
-        return cards;
-    }
+    // private getAllCards() {
+    //     const allValues = [2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
+    //     const allSuits = ['spades', 'diamonds', 'clubs', 'hearts'];
+    //     const cards = [];
+    //     allSuits.forEach(suit => {
+    //         allValues.forEach(value => {
+    //             const x: Card = {
+    //                 suit: suit,
+    //                 value: value
+    //             };
+    //             cards.push(x);
+    //         })
+    //     });
+    //     return cards;
+    // }
 }

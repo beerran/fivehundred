@@ -21,16 +21,16 @@
         <card-hand [amount]="opponent?.cardCount" [back]="true"></card-hand>  
       </ion-col>
       <ion-col col-6>
-        <card-deck [amount]="gameInfo?.deckRemaining" (onCardClick)="inState('MyPickupTurn') ? drawCard() : null"></card-deck>      
+        <card-deck [amount]="gameInfo?.deckRemaining" (onCardClick)="inState('MyPickupTurn') && !actionsDisabled ? drawCard() : null"></card-deck>      
       </ion-col>
       <ion-col col-6>
-        <card-deck [cards]="gameInfo?.trash" (onCardClick)="inState('MyPickupTurn') ? pickupCard() : null"></card-deck>
+        <card-deck [cards]="gameInfo?.trash" (onCardClick)="inState('MyPickupTurn') && !actionsDisabled ? pickupCard() : null"></card-deck>
       </ion-col>
       <ion-col col-12>
         <card-hand [cards]="player?.cards" (onCardClick)="actOnCard($event)"></card-hand>
       </ion-col>
       <ion-col col-6 offset-3>
-        <button ion-button block color="primary" (click)="makePlay()" [disabled]="!inState('MyPlayTurn') && !inState('MyThrowTurn')" icon-start><ion-icon [name]="action === 'play' ? 'arrow-dropup' : 'trash'"></ion-icon> {{action === 'play' ? 'Make play' : 'Throw card'}}</button>          
+        <button ion-button block color="primary" (click)="actionsDisabled ? null : makePlay()" [disabled]="(!inState('MyPlayTurn') && !inState('MyThrowTurn')) || actionsDisabled" icon-start><ion-icon [name]="action === 'play' ? 'arrow-dropup' : 'trash'"></ion-icon> {{action === 'play' ? 'Make play' : 'Throw card'}}</button>          
       </ion-col>
       <ion-col col-3>
           <button ion-button block color="light" (click)="passTurn()" [disabled]="!inState('MyPlayTurn')" icon-start>Done</button>          

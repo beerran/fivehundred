@@ -59,6 +59,8 @@ export class HomePage implements OnInit {
   pointsAdded = 0;
   gameWon: boolean;
 
+  actionsDisabled = false;
+
   constructor(
     public navCtrl: NavController,
     private gameService: GameService
@@ -84,8 +86,10 @@ export class HomePage implements OnInit {
     this.gameService.currentGame.player1.subscribe(data => this.gameInfo.player1 = data);
     this.gameService.currentGame.player2.subscribe(data => this.gameInfo.player2 = data);
     this.gameService.currentGame.state.subscribe(data => {
-      this.gameInfo.state = <GameState>data;
+      this.gameInfo.state = <GameState> data;
       this.action = this.inState('MyThrowTurn') ? 'throw' : 'play';
+
+      console.log(this.gameInfo.state);
 
       if ([GameState.GameFinishedPlayer1Winner, GameState.GameFinishedPlayer2Winner].indexOf(this.gameInfo.state) >= 0) {
         this.renderGameOverNotification();
@@ -98,11 +102,13 @@ export class HomePage implements OnInit {
   }
 
   drawCard() {
-    this.gameService.drawCard();
+    this.actionsDisabled = true;
+    this.gameService.drawCard().then(() => this.actionsDisabled = false);
   }
 
   pickupCard() {
-    this.gameService.pickupCard();
+    this.actionsDisabled = true;
+    this.gameService.pickupCard().then(() => this.actionsDisabled = false);
   }
 
   passTurn() {
@@ -143,19 +149,23 @@ export class HomePage implements OnInit {
 
   makePlay() {
     if (this.action === 'play' && (this.cardsToPlay.length >= 3 || this.alreadyInPlayed(this.cardsToPlay[0]))) {
+      this.actionsDisabled = true;
       this.cardsToPlay.forEach(c => c.state = 'inactive');
       setTimeout(() => {
         this.gameService.makePlay(this.cardsToPlay).then((points) => {
           this.pointsAdded = points;
           this.clearSelectedCards();
           this.showPoints = 'show';
+          this.actionsDisabled = false;
           setTimeout(() => this.showPoints = 'hide', 500);
         });
       }, 500);
     } else if (this.action === 'throw' && this.cardsToPlay.length === 1) {
+      this.actionsDisabled = true;
       this.cardsToPlay.forEach(c => c.selected = false);
       this.gameService.throwCard(this.cardsToPlay[0]).then((cardsThrown) => {
         cardsThrown ? this.clearSelectedCards() : this.cardsToPlay[0].selected = true;
+        this.actionsDisabled = false;
       });
     }
   }
